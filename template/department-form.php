@@ -1,12 +1,16 @@
 <?php
 
-    require $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
+    //require $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/vendor/autoload.php';
+    require dirname(__FILE__,2).'/vendor/autoload.php';
 
-    include $_SERVER['DOCUMENT_ROOT'].'/connect.php';
-    include $_SERVER['DOCUMENT_ROOT'].'/model/Department.php';
+    // include $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/connect.php';
+    // include $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/model/Department.php';
+    include dirname(__FILE__,2).'/connect.php';
+    include dirname(__FILE__,2).'/model/Department.php';
     
     // Uncomment for localhost running
-    $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
+    // $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'].'/php_api_jwt');
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__,2));
     $dotenv->load();
 
     $MDB_USER = $_ENV['MDB_USER'];
@@ -83,7 +87,6 @@
 
         <h2>Εισαγωγή νέου Department</h2>
         <p><span class="error">* required field</span></p>
-            
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
             Identifier: <input type="text" name="identifier" value="<?php echo $identifier;?>">
             <span class="error">* <?php echo $identifierErr;?></span>

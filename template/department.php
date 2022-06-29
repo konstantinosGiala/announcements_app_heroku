@@ -1,12 +1,12 @@
 <?php
     // $data = json_decode(file_get_contents("http://localhost:8000/department/list"),true);
 
-    require $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
+    require dirname(__FILE__,2).'/vendor/autoload.php';
 
-    include $_SERVER['DOCUMENT_ROOT'].'/connect.php';
+    include dirname(__FILE__,2).'/connect.php';
     
     // Uncomment for localhost running
-    $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__,2));
     $dotenv->load();
 
     $MDB_USER = $_ENV['MDB_USER'];
