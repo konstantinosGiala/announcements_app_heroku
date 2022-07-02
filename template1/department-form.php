@@ -1,15 +1,15 @@
 <?php
 
-    //require $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/vendor/autoload.php';
+    //require $_SERVER['DOCUMENT_ROOT'].'/php_api/vendor/autoload.php';
     require dirname(__FILE__,2).'/vendor/autoload.php';
 
-    // include $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/connect.php';
-    // include $_SERVER['DOCUMENT_ROOT'].'/php_api_jwt/model/Department.php';
+    // include $_SERVER['DOCUMENT_ROOT'].'/php_api/connect.php';
+    // include $_SERVER['DOCUMENT_ROOT'].'/php_api/model/Department.php';
     include dirname(__FILE__,2).'/connect.php';
     include dirname(__FILE__,2).'/model/Department.php';
     
     // Uncomment for localhost running
-    // $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'].'/php_api_jwt');
+    // $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'].'/php_api');
     $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__,2));
     $dotenv->load();
 
@@ -47,7 +47,7 @@
         } else {
             $name = test_input($_POST["name"]);
             // check if name only contains letters and whitespace or Greek letters
-            if (!preg_match("/^[a-zA-Z\p{Greek}]+$/u",$name)) {
+            if (!preg_match("/^[a-zA-Z\p{Greek}\s]+$/u",$name)) {
             $nameErr = "Only letters and white space allowed";
             }
         }
@@ -64,7 +64,7 @@
 
         if (empty($identifierErr) && empty($nameErr)){
             $data = array(
-                'identifier' => $identifier,
+                'identifier' => intval($identifier),
                 'name' => $name
             );
             $result = saveDepartment($data);
@@ -86,6 +86,7 @@
     <body>  
 
         <h2>Εισαγωγή νέου Department</h2>
+        <!-- <?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?> -->
         <p><span class="error">* required field</span></p>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
             Identifier: <input type="text" name="identifier" value="<?php echo $identifier;?>">
