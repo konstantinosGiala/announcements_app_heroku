@@ -3,8 +3,8 @@
 require __DIR__.'/vendor/autoload.php'; // include Composer's autoloader
 
 // Uncomment for localhost running
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
 include 'connect.php';
 
@@ -21,9 +21,6 @@ $MDB_USER = $_ENV['MDB_USER'];
 $MDB_PASS = $_ENV['MDB_PASS'];
 $ATLAS_CLUSTER_SRV = $_ENV['ATLAS_CLUSTER_SRV'];
 $connection = new Connection($MDB_USER, $MDB_PASS, $ATLAS_CLUSTER_SRV);
-
-$SECRET_KEY = $_ENV['SECRET_KEY'];
-$ISSUER_CLAIM = $_ENV['ISSUER_CLAIM'];
 
 $department = new Department($connection);
 $subdepartment = new Subdepartment($connection);

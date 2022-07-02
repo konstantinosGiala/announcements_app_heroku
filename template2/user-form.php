@@ -27,34 +27,76 @@
     $username = $password = $name = $surname = $email = $identifier = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-         
-        if (empty($_POST["name"])) {
-            $nameErr = "Name is required";
+        
+        if (empty($_POST["username"])) {
+            $usernameErr = "Username is required";
         } else {
-            $name = test_input($_POST["name"]);
+            $username = test_input($_POST["username"]);
             // check if name only contains letters and whitespace or Greek letters
-            if (!preg_match("/^[a-zA-Z\p{Greek}]+$/u",$name)) {
-            $nameErr = "Only letters and white space allowed";
+            if (!preg_match("/^[a-zA-Z]+$/u",$username)) {
+            $nameErr = "Only letters allowed";
             }
+        }
+
+        if (empty($_POST["password"])) {
+            $passwordErr = "Password is required";
+        } else {
+            $password = test_input($_POST["password"]);
         }
          
         if (empty($_POST["identifier"])) {
             $identifierErr = "Identifier is required";
         } else {
             $identifier = test_input($_POST["identifier"]);
-            // check if identifier is number
-            if (!is_numeric($identifier)) {
-            $identifierErr = "Invalid identifier format";
+        }
+
+        if (empty($_POST["name"])) {
+            $nameErr = "Name is required";
+        } else {
+            $name = test_input($_POST["name"]);
+            // check if name only contains letters and whitespace or Greek letters
+            if (!preg_match("/^[a-zA-Z\p{Greek}\s]+$/u",$name)) {
+            $nameErr = "Only letters and white space allowed";
+            }
+        }
+
+        if (empty($_POST["surname"])) {
+            $surnameErr = "Surname is required";
+        } else {
+            $surname = test_input($_POST["surname"]);
+            // check if name only contains letters and whitespace or Greek letters
+            if (!preg_match("/^[a-zA-Z\p{Greek}\s]+$/u",$surname)) {
+            $surnameErr = "Only letters and white space allowed";
+            }
+        }
+
+        if (empty($_POST["email"])) {
+            $emaiErr = "Email is required";
+        } else {
+            $email = test_input($_POST["email"]);
+            // check if name only contains letters and whitespace or Greek letters
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Invalid email format";
             }
         }
 
         if (empty($identifierErr) && empty($nameErr)){
+            $uCategory = explode("-", $identifier);
             $data = array(
-                'identifier' => $identifier,
-                'name' => $name
+                'username' => $username,
+                'password' => $password,
+                'user_category' => [
+                    'identifier' => $uCategory[0],
+                    'name' => $uCategory[1]
+                ],
+                'surname' => $surname,
+                'name' => $name,
+                'email' => $email,
             );
             $result = saveUser($data);
         }
+
+        
     }
 
     $data = json_decode($user->showUsers(), true);
@@ -67,7 +109,7 @@
         <div class="align-self-center">
             <div class="card card-body"> 
 
-                <h2>Εισαγωγή νέου Department</h2>
+                <h2>Εισαγωγή νέου Χρήστη</h2>
                 <!-- <?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?> -->
                 <p><span class="text-danger">* required field</span></p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
@@ -81,7 +123,7 @@
                         <option value="" default>Επιλέξτε Κατηγορία Χρήστη</option>
                         <?php 
                             foreach($dataUsersCategory as $value) {
-                                echo '<option value="'.$value['identifier'].'">'.$value['name']."</option>";
+                                echo '<option value="'.$value['identifier']."-".$value['name'].'">'.$value['name']."</option>";
                             } 
                         ?>
                     </select>

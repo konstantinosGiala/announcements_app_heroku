@@ -10,8 +10,8 @@
     
     // Uncomment for localhost running
     // $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'].'/php_api');
-    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__,2));
-    $dotenv->load();
+    // $dotenv = Dotenv\Dotenv::createImmutable(dirname(__FILE__,2));
+    // $dotenv->load();
 
     $MDB_USER = $_ENV['MDB_USER'];
     $MDB_PASS = $_ENV['MDB_PASS'];

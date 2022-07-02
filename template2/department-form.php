@@ -64,7 +64,7 @@
         <div class="align-self-center">
             <div class="card card-body"> 
 
-                <h2>Εισαγωγή νέου Department</h2>
+                <h2>Εισαγωγή νέας Διεύθυνσης</h2>
                 <!-- <?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?> -->
                 <p><span class="text-danger">* required field</span></p>
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  

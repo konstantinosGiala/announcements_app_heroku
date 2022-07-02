@@ -21,7 +21,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="user-form.php">Χρήστες</a></li>
-                                <li><a class="dropdown-item" href="subdepartment-form.php">Ρόλοι</a></li>
+                                <li><a class="dropdown-item" href="user-role-form.php">Ρόλοι</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="user-category-form.php">Κατηγορίες Χρηστών</a></li>
                             </ul>
