@@ -112,7 +112,7 @@ class Categories {
         $name = $data->name;
         try {
             $result = $this->collection->updateOne( 
-                [ 'identifier'=>$identifier ],
+                [ 'identifier'=>intval($identifier) ],
                 [ 
                     '$push' => [
                         'categories' => [
