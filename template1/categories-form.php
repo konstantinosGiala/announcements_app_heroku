@@ -71,7 +71,7 @@
 
         if (empty($identifierErr) && empty($nameErr) && empty($subdepartmentIDErr)){
             $data = array(
-                'identifier' => intval($identifier),
+                'identifier' => $identifier,
                 'subdepartment_id' => $subdepartmentID,
                 'name' => $name
             );
