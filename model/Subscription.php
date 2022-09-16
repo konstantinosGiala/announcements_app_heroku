@@ -9,10 +9,13 @@ class Subscription {
 
     protected $collection;
 
+    protected $generalFunctions;
+
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_user();
             error_log("Connection to collection User");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection User".$e);
@@ -141,62 +144,55 @@ class Subscription {
             return $this->returnValue('false');
     }
 
-    // public function deleteSubscription($id,$subscription) {
-    //     try {
-    //         $result = $this->collection->updateOne( 
-    //             [ '_id' => new MongoDB\BSON\ObjectId($id) ],
-    //             [ '$pull' => [ 'subscription' => $subscription ]]
-    //         );
-    //         return $result->getModifiedCount();
-    //     }
-    //     catch (MongoDB\Exception\UnsupportedException $e){
-    //         error_log("Problem in delete subscription \n".$e);
-    //     }
-    //     catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
-    //         error_log("Problem in delete subscription \n".$e);
-    //     }
-    //     catch (MongoDB\Driver\Exception\BulkWriteException $e){
-    //         error_log("Problem in delete subscription \n".$e);
-    //     }
-    //     catch (MongoDB\Driver\Exception\RuntimeException $e){
-    //         error_log("Problem in delete subscription \n".$e);
-    //     };
-    // }
+    public function deleteSubscription($id,$subscription) {
+        try {
+            $result = $this->collection->updateOne( 
+                [ '_id' => new MongoDB\BSON\ObjectId($id) ],
+                [ '$pull' => [ 'subscription' => $subscription ]]
+            );
+            return $result->getModifiedCount();
+        }
+        catch (MongoDB\Exception\UnsupportedException $e){
+            error_log("Problem in delete subscription \n".$e);
+        }
+        catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
+            error_log("Problem in delete subscription \n".$e);
+        }
+        catch (MongoDB\Driver\Exception\BulkWriteException $e){
+            error_log("Problem in delete subscription \n".$e);
+        }
+        catch (MongoDB\Driver\Exception\RuntimeException $e){
+            error_log("Problem in delete subscription \n".$e);
+        };
+    }
 
-    // public function update_subscription($data) {
-    //     $id = $data->_id;
-    //     $subscription = $data->subscription;
+    public function update_subscription($data) {
+        $id = $data->_id;
+        $subscription = $data->subscription;
         
-    //     try {
-    //         $result = $this->collection->updateOne( 
-    //             [ 
-    //                 '_id' => new MongoDB\BSON\ObjectId($id),
-    //                 'roles._id' => new MongoDB\BSON\ObjectId($roleid)
-    //             ],
-    //             [ '$set' => [ 
-    //                     'role.$.permission' => $permission,
-    //                     'role.$.authorizations' => $authorizations
-    //                 ]
-    //             ]
-    //         );
-    //         return $result->getModifiedCount();
-    //     }
-    //     catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
-    //         error_log("Problem in update roles \n".$e);
-    //     }
-    //     catch (MongoDB\Driver\Exception\BulkWriteException $e){
-    //         error_log("Problem in update roles \n".$e);
-    //     }
-    //     catch (MongoDB\Driver\Exception\RuntimeException $e){
-    //         error_log("Problem in update roles \n".$e);
-    //     };
-    // }
-
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
+        try {
+            $result = $this->collection->updateOne( 
+                [ 
+                    '_id' => new MongoDB\BSON\ObjectId($id),
+                    'roles._id' => new MongoDB\BSON\ObjectId($roleid)
+                ],
+                [ '$set' => [ 
+                        'role.$.permission' => $permission,
+                        'role.$.authorizations' => $authorizations
+                    ]
+                ]
+            );
+            return $result->getModifiedCount();
+        }
+        catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
+            error_log("Problem in update roles \n".$e);
+        }
+        catch (MongoDB\Driver\Exception\BulkWriteException $e){
+            error_log("Problem in update roles \n".$e);
+        }
+        catch (MongoDB\Driver\Exception\RuntimeException $e){
+            error_log("Problem in update roles \n".$e);
+        };
     }
 }
 ?>

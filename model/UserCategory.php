@@ -9,10 +9,13 @@ class UserCategory {
 
     protected $collection;
 
+    protected $generalFunctions; 
+
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_user_category();
             error_log("Connection to collection User_category");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection User_category".$e);
@@ -297,13 +300,6 @@ class UserCategory {
             };
         } else 
             return $this->returnValue('false');
-    }
-
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
     }
 }
 ?>

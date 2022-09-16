@@ -1,6 +1,5 @@
-<?php include 'header-scripts.php'; ?>
+<?php include 'header-script.php'; ?>
 <?php
-    include dirname(__FILE__,2).'/model/UserCategory.php';
 
     function test_input($data) {
         $data = trim($data);
@@ -16,9 +15,6 @@
         $result = $usercategory->createUsercategory($data);
         return $result;
     }
-    
-    $usercategory = new UserCategory($connection);
-    header('Content-Type: text/html; charset=utf-8');
 
     // // define variables and set to empty values
     $nameErr = $identifierErr = "";

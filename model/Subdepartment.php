@@ -9,10 +9,13 @@ class Subdepartment {
 
     protected $collection;
 
+    protected $generalFunctions;
+
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_department();
             error_log("Connection to collection Department");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection Department".$e);
@@ -284,13 +287,6 @@ class Subdepartment {
             };
         } else 
             return "$this->returnValue('false')";
-    }
-
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
     }
 }
 ?>

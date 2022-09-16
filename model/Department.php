@@ -9,17 +9,20 @@ class Department {
 
     protected $collection;
 
+    protected $generalFunctions;
+
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_department();
             error_log("Connection to collection Department");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection Department".$e);
         }
     }
-   
-    /**
+    
+     /**
      * @OA\Get(
      *   path="/department/list",
      *   description="List departments",
@@ -39,22 +42,22 @@ class Department {
         try {
             $result = $this->collection->find()->toArray();
             if (count($result)>0):
-                return json_encode($result);
+                return $this->generalFunctions->returnValue($result,true);
             else:
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("", false);
             endif;
         }
         catch (MongoDB\Exception\UnsupportedException $e){
             error_log("Problem in find departments \n".$e);
-            return $this->returnValue('false');
+            return $this->generalFunctions->returnValue("", false);
         }
         catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
             error_log("Problem in find departments \n".$e);
-            return $this->returnValue('false');
+            return $this->generalFunctions->returnValue("", false);
         }
         catch (MongoDB\Driver\Exception\RuntimeException $e){
             error_log("Problem in find departments \n".$e);
-            return $this->returnValue('false');
+            return $this->generalFunctions->returnValue("", false);
         };
     }
 
@@ -67,7 +70,7 @@ class Department {
      *   @OA\Parameter(
      *      name="id",
      *      in="path",
-     *      description="Department id to show",
+     *      description="This is the mongo id of the department that we will return",
      *      required=true,
      *      @OA\Schema(
      *          type="string",
@@ -91,25 +94,25 @@ class Department {
                     '_id'=>new MongoDB\BSON\ObjectId($id)
                 ]);
                 if ($result):
-                    return json_encode($result);
+                    return $this->generalFunctions->returnValue($result, true);
                 else:
-                    return $this->returnValue('false');
+                    return $this->generalFunctions->returnValue("", false);
                 endif;
             }
             catch (MongoDB\Exception\UnsupportedException $e){
                 error_log("Problem in find departments \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("", false);
             }
             catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
                 error_log("Problem in find departments \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("", false);
             }
             catch (MongoDB\Driver\Exception\RuntimeException $e){
                 error_log("Problem in find departments \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("", false);
             };
         } else 
-            return $this->returnValue('false'); 
+            return $this->generalFunctions->returnValue("", false); 
     }
 
     /**
@@ -145,37 +148,57 @@ class Department {
         $identifier = $data->identifier;
         $name = $data->name;
 
-        if( isset( $identifier ) && isset($name)) {
+        $checked = false;
+
+        $result = $this->collection->findOne([
+            'identifier'=>intval($identifier)
+        ]);
+        if ($result):
+            return $this->generalFunctions->returnValue("This identifier exists", false);
+        else:
+            $checked = true;
+        endif;
+
+        $result = $this->collection->findOne([
+            'name'=>$name
+        ]);
+        if ($result):
+            return $this->generalFunctions->returnValue("This name exists", false);
+        else:
+            $checked = true;
+        endif;
+
+
+        if( isset( $identifier ) && isset($name) && $checked) {
             try {
-                $result = $this->collection->insertOne( [ 
-                    'identifier' => $identifier, 
+                $result = $this->collection->insertOne( [
+                    'identifier' => intval($identifier), 
                     'name' => $name,
                     'subdepartment' => [],
                     'categories' => [] 
                 ] );
                 if ($result->getInsertedCount()==1)
-                    return $this->returnValue('true');
+                    return $this->generalFunctions->returnValue("",'true');
                 else 
-                    return $this->returnValue('false');
+                    return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
                 error_log("Problem in insert department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\BulkWriteException $e){
                 error_log("Problem in insert department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\RuntimeException $e){
                 error_log("Problem in insert department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             };
         } else 
-            return $this->returnValue('false'); 
-        
+            return $this->generalFunctions->returnValue("",false); 
     }
 
-    /**
+     /**
      * @OA\Delete(
      *     path="/department/{id}/delete",
      *     description="Delete a department",
@@ -184,7 +207,7 @@ class Department {
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Department id to delete",
+     *         description="Department mongo id to delete",
      *         required=true,
      *         @OA\Schema(
      *             type="string",
@@ -211,31 +234,31 @@ class Department {
                     '_id'=>new MongoDB\BSON\ObjectId($id)
                 ]);
                 if ($result->getDeletedCount()==1)
-                    return $this->returnValue('true');
+                    return $this->generalFunctions->returnValue("",'true');
                 else 
-                    return $this->returnValue('false');
+                    return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Exception\UnsupportedException $e){
                 error_log("Problem in delete department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
                 error_log("Problem in delete department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\BulkWriteException $e){
                 error_log("Problem in delete department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\RuntimeException $e){
                 error_log("Problem in delete department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             };
         } else 
-            return $this->returnValue('false');
+            return $this->generalFunctions->returnValue("",false);
     }
 
-    /**
+     /**
      * @OA\Patch(
      *     path="/department/update",
      *     description="Update a department",
@@ -274,37 +297,31 @@ class Department {
                 $result = $this->collection->updateOne( 
                     [ '_id' => new MongoDB\BSON\ObjectId($id) ],
                     [ '$set' => [
-                            'identifier' => $identifier,
+                            'identifier' => intval($identifier),
                             'name' => $name 
                         ]
                     ]
                 );
                 if ($result->getModifiedCount()==1)
-                    return $this->returnValue('true');
+                    return $this->generalFunctions->returnValue("",'true');
                 else 
-                    return $this->returnValue('false');
+                    return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\InvalidArgumentException $e){
                 error_log("Problem in update department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\BulkWriteException $e){
                 error_log("Problem in update department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             }
             catch (MongoDB\Driver\Exception\RuntimeException $e){
                 error_log("Problem in update department \n".$e);
-                return $this->returnValue('false');
+                return $this->generalFunctions->returnValue("",false);
             };
         } else 
-            return $this->returnValue('false');
+            return $this->generalFunctions->returnValue("",false);
     }
 
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
-    }
 }
 ?>

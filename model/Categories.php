@@ -9,17 +9,20 @@ class Categories {
 
     protected $collection;
 
+    protected $generalFunctions; 
+
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_department();
             error_log("Connection to collection Department");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection Department".$e);
         }
     }
     
-     /**
+    /**
      * @OA\Get(
      *   path="/categories/{id}/list",
      *   description="A list with categories",
@@ -257,13 +260,6 @@ class Categories {
         catch (MongoDB\Driver\Exception\RuntimeException $e){
             error_log("Problem in update categories \n".$e);
         };
-    }
-
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
     }
 }
 ?>

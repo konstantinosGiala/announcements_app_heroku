@@ -1,13 +1,15 @@
 <?php
 
-// namespace Model;
-
 use OpenApi\Annotations as OA;
 
 /**
 * @OA\Tag(
 *     name="Department",
 *     description="Operations about Department collection",
+* )
+* @OA\Tag(
+*     name="Subdepartment",
+*     description="Operations about Subdepartment collection",
 * )
 * @OA\Tag(
 *     name="Subdepartment",
@@ -43,7 +45,7 @@ use OpenApi\Annotations as OA;
 *     description="Anouncements API",
 * )
 * @OA\Server(
-*     url="http://gialamo-departments-app.herokuapp.com/",
+*     url="http://coding-factory-test.herokuapp.com/",
 *     description="API server"
 * )
 * @OA\Server(

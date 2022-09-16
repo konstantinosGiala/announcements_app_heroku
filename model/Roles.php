@@ -6,13 +6,16 @@ header('Content-Type: application/json; charset=utf-8');
 use OpenApi\Annotations as OA;
 
 class Roles {
-
+    
     protected $collection;
+
+    protected $generalFunctions; 
 
     public function __construct($connection) {
         try {
             $this->collection = $connection->connect_to_user();
             error_log("Connection to collection User");
+            $this->generalFunctions = new GeneralFunctions();
         }
         catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
             error_log("Problem in connection with collection User".$e);
@@ -328,13 +331,6 @@ class Roles {
             };
         } else 
             return $this->returnValue('false');    
-    }
-
-    private function returnValue($value){
-        if ($value==='true')
-            return json_encode(array('success' => true));
-        else 
-            return json_encode(array('success' => false));
     }
 }
 ?>

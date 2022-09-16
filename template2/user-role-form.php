@@ -1,9 +1,5 @@
-<?php include 'header-scripts.php'; ?>
+<?php include 'header-script.php'; ?>
 <?php
-    include dirname(__FILE__,2).'/model/Roles.php';
-    include dirname(__FILE__,2).'/model/User.php';
-    include dirname(__FILE__,2).'/model/Department.php';
-
     function test_input($data) {
         $data = trim($data);
         $data = stripslashes($data);
@@ -19,10 +15,6 @@
         return $result;
     }
     
-    $roles = new Roles($connection);
-    $user = new User($connection);
-    $department = new Department($connection);
-    header('Content-Type: text/html; charset=utf-8');
 
     // // define variables and set to empty values
     $usernameErr = $permissionErr = $authorizationErr = "";
@@ -95,7 +87,7 @@
                     Πρόσβαση: <select name="authorization" id="authorization">
                         <option value="" default>Επιλέξτε τμήμα</option>
                         <?php
-                            foreach($allDepartments as $value){ 
+                            foreach($data as $value){ 
                                 foreach($value['subdepartment'] as $svalue) {
                                     echo '<option value="'.$svalue['name'].'">'.$svalue['name']."</option>";
                                 }

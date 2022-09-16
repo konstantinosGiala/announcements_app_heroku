@@ -1,8 +1,6 @@
-<?php include 'header-scripts.php'; ?>
+<?php include 'header-script.php'; ?>
 <?php
-    include dirname(__FILE__,2).'/model/User.php';
-    include dirname(__FILE__,2).'/model/UserCategory.php';
-
+   
     function test_input($data) {
         $data = trim($data);
         $data = stripslashes($data);
@@ -18,10 +16,7 @@
         return $result;
     }
     
-    $user = new User($connection);
-    $usercategory = new UserCategory($connection);
-    header('Content-Type: text/html; charset=utf-8');
-
+    
     // // define variables and set to empty values
     $usernameErr = $passwordErr = $nameErr = $surnameErr = $emailErr = $identifierErr = "";
     $username = $password = $name = $surname = $email = $identifier = "";
